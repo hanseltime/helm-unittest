@@ -155,7 +155,8 @@ func TestLengthEqualDocumentsValidatorFail_Multi(t *testing.T) {
 	})
 
 	assert.False(t, pass)
-	assert.Equal(t, []string{"DocumentIndex:\t0", "Error:", "\tspec.rules count doesn't match as expected. actual: 1", "\texpected result does not match"}, diff)
+	// It will provide the alphabetical that failed
+	assert.Equal(t, []string{"DocumentIndex:\t0", "Error:", "\tspec.tls count doesn't match as expected. actual: 2", "\texpected result does not match"}, diff)
 }
 
 func TestLengthEqualDocumentsValidatorWhenPathAndNoCount(t *testing.T) {
