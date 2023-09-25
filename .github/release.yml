@@ -1,0 +1,44 @@
+name: Release
+run-name: ${{ github.ref_name }} Release
+
+on:
+  push:
+    branches: 
+      - master
+      - alpha
+
+jobs:
+  call-ci-workflow:
+    uses: ./.github/workflows/ci.yml
+    with:
+      from: 'PR Checks'
+  release:
+    runs-on: ubuntu-latest
+    needs: call-ci-workflow
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Build binaries
+        run: make dist
+      - name: Install yq
+        id: setup-yq
+        uses: shiipou/setup-yq-action@v2.2.0
+      - name: Get release version
+        id: release-version
+        run: |
+          v=$(yq '.version' plugin.yaml)
+          echo "version=${v}" >> $GITHUB_OUTPUT
+      - name: Upload binaries
+        run: |
+          go install github.com/tcnksm/ghr@latest
+          ghr ${{ steps.release-version.outputs.version }} _dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
