@@ -37,11 +37,13 @@ jobs:
       - name: Cleanup dependencies
         run: go mod tidy
       - name: Archive test results
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: test-results
           path: /tmp/test-results
       - name: Archive test artifacts
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: /tmp/test-artifacts
