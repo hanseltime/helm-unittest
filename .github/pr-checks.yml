@@ -3,7 +3,7 @@ run-name: ${{ github.ref_name }} PR Checks
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   call-ci-workflow:
