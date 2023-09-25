@@ -41,7 +41,7 @@ jobs:
         id: release-version
         run: |
           v=$(yq '.version' plugin.yaml)
-          echo "version=${v}" >> $GITHUB_OUTPUT
+          echo "version=v${v}" >> $GITHUB_OUTPUT
       - name: Upload binaries
         run: |
           go install github.com/tcnksm/ghr@latest
