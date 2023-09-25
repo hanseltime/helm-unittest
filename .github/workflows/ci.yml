@@ -33,15 +33,17 @@ jobs:
           go test ./... -coverprofile=/tmp/coverage -v -covermode=atomic 2>&1 | go-junit-report -set-exit-code > /tmp/test-results/go-test-report.xml
       # TODO: no sonar cloud scan like in original for now
       - name: Check formatted
-        run: "! gofmt -l . 2>&1 | read"
+        run: gofmt -l .
       - name: Cleanup dependencies
         run: go mod tidy
       - name: Archive test results
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: test-results
           path: /tmp/test-results
       - name: Archive test artifacts
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: /tmp/test-artifacts
